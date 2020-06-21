@@ -158,13 +158,13 @@
       "languageVersion": "2.6"
     },
     {
-      "name": "plugin_videoplayer",
+      "name": "flutterpluginvideoplayer",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2020-06-21T04:32:46.105220Z",
+  "generated": "2020-06-21T06:33:38.793575Z",
   "generator": "pub",
   "generatorVersion": "2.8.2"
 }

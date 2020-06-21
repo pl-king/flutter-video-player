@@ -1,6 +1,6 @@
-# plugin_videoplayer
+# flutterpluginvideoplayer
 
-A new flutter plugin project.
+A new Flutter plugin.
 
 ## Getting Started
 

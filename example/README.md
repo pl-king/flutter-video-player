@@ -1,6 +1,6 @@
-# plugin_videoplayer_example
+# flutterpluginvideoplayer_example
 
-Demonstrates how to use the plugin_videoplayer plugin.
+Demonstrates how to use the flutterpluginvideoplayer plugin.
 
 ## Getting Started
 
