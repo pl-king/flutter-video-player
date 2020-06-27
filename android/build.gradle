@@ -6,7 +6,7 @@ buildscript {
         google()
         jcenter()
     }
-
+    apply from: 'thirdparty-lib/config.gradle'
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
     }
@@ -16,6 +16,10 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url 'http://localhost:8081/nexus/service/local/repositories/thirdparty/content'
+        }
+        maven { url "http://maven.aliyun.com/nexus/content/repositories/releases" }
     }
 }
 
@@ -30,4 +34,23 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+    sourceSets.main {
+        jni.srcDirs = []
+        jniLibs.srcDir "src/main/libs"
+    }
+
+}
+dependencies {
+    implementation fileTree(include: ['*.aar'], dir: 'libs')
+    implementation externalAndroidSupportV4
+    implementation externalAndroidAppCompatV7
+    implementation externalOKHTTP
+    implementation externalAndroidRecyclerView
+    implementation externalGSON
+    implementation externalGlide
+
+    implementation 'com.aliyun.video.android:svideosnap:3.10.5'//短视频基础版SDK必须依赖
+    implementation 'com.aliyun.video.android:core:1.2.0' //核心库必须依赖
+    implementation  'com.alivc.conan:AlivcConan:0.9.5'//核心库必须依赖
+    implementation  'com.aliyun.video.android:upload:1.5.2'// 上传库,如不需要上传可不依赖
 }
