@@ -29,6 +29,9 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.view.TextureRegistry;
 
+import static com.aliyun.player.bean.InfoCode.BufferedPosition;
+import static com.aliyun.player.bean.InfoCode.CurrentPosition;
+
 /**
  * FlutterpluginvideoplayerPlugin
  */
@@ -153,7 +156,7 @@ public class FlutterpluginvideoplayerPlugin implements FlutterPlugin, MethodCall
 
     }
 
-    private static class PlayerManager implements IPlayer.OnPreparedListener, IPlayer.OnErrorListener, IPlayer.OnStateChangedListener, IPlayer.OnInfoListener, IPlayer.OnRenderingStartListener, IPlayer.OnTrackChangedListener, IPlayer.OnSeekCompleteListener, IPlayer.OnSeiDataListener {
+    private static class PlayerManager implements IPlayer.OnPreparedListener, IPlayer.OnErrorListener, IPlayer.OnStateChangedListener, IPlayer.OnInfoListener, IPlayer.OnRenderingStartListener, IPlayer.OnTrackChangedListener, IPlayer.OnSeekCompleteListener, IPlayer.OnSeiDataListener, IPlayer.OnCompletionListener {
         //播放器
         private AliPlayer mAliyunVodPlayer;
         private Surface surface;
@@ -207,7 +210,7 @@ public class FlutterpluginvideoplayerPlugin implements FlutterPlugin, MethodCall
 //            //播放器状态
             mAliyunVodPlayer.setOnStateChangedListener(this);
 //            //播放结束
-//            mAliyunVodPlayer.setOnCompletionListener(new VideoPlayerCompletionListener(this));
+            mAliyunVodPlayer.setOnCompletionListener(this);
 //            //播放信息监听
             mAliyunVodPlayer.setOnInfoListener(this);
 //            //第一帧显示
@@ -426,7 +429,6 @@ public class FlutterpluginvideoplayerPlugin implements FlutterPlugin, MethodCall
             int width = mAliyunVodPlayer.getVideoWidth();
             int height = mAliyunVodPlayer.getVideoHeight();
             textureEntry.surfaceTexture().setDefaultBufferSize(width, height);
-//            this.surfaceTexture.setDefaultBufferSize(width, height);
         }
 
         @Override
@@ -439,9 +441,25 @@ public class FlutterpluginvideoplayerPlugin implements FlutterPlugin, MethodCall
             Log.e(TAG, "onStateChanged" + i);
         }
 
+        long bufferedPosition = 0;
+        long currentPosition = 0;
+
         @Override
         public void onInfo(InfoBean infoBean) {
-//            Log.e(TAG, "onInfo" + infoBean.getExtraMsg());
+            Log.e(TAG, "onInfo" + infoBean.getExtraValue() + "---------" + infoBean.getCode());
+
+            if (infoBean.getCode() == BufferedPosition) {
+                bufferedPosition = infoBean.getExtraValue();
+            }
+            if (infoBean.getCode() == CurrentPosition) {
+                currentPosition = infoBean.getExtraValue();
+            }
+            Map<String, Object> progressMap = new HashMap<>();
+            progressMap.put("event", "progress");
+            progressMap.put("progress", currentPosition);
+            progressMap.put("duration", mAliyunVodPlayer.getDuration());
+            progressMap.put("playable", bufferedPosition);
+            eventSink.success(progressMap);
         }
 
         @Override
@@ -467,6 +485,13 @@ public class FlutterpluginvideoplayerPlugin implements FlutterPlugin, MethodCall
         @Override
         public void onSeiData(int i, byte[] bytes) {
 
+        }
+
+        @Override
+        public void onCompletion() {
+            Map<String, Object> playendMap = new HashMap<>();
+            playendMap.put("event", "playend");
+            eventSink.success(playendMap);
         }
     }
 }
