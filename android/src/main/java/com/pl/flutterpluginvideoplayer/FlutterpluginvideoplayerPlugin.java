@@ -136,7 +136,7 @@ public class FlutterpluginvideoplayerPlugin implements FlutterPlugin, MethodCall
                 break;
             case "setRate":
                 float rate = ((Number) call.argument("rate")).floatValue();
-//                player.setRate(rate);
+                player.setSpeed(rate);
                 result.success(null);
                 break;
             case "setBitrateIndex":
@@ -340,6 +340,10 @@ public class FlutterpluginvideoplayerPlugin implements FlutterPlugin, MethodCall
             }
         }
 
+        public void setSpeed(float v) {
+            mAliyunVodPlayer.setSpeed(v);
+        }
+
         void seekTo(int position) {
             if (mAliyunVodPlayer == null) {
                 return;
@@ -493,5 +497,7 @@ public class FlutterpluginvideoplayerPlugin implements FlutterPlugin, MethodCall
             playendMap.put("event", "playend");
             eventSink.success(playendMap);
         }
+
+
     }
 }
