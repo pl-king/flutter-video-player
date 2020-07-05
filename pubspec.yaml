@@ -11,7 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  wakelock: ^0.1.4+2
+  auto_orientation: 1.0.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

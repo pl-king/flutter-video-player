@@ -5,7 +5,6 @@ import 'package:flutterpluginvideoplayer/model/video_player_value.dart';
 import 'package:flutterpluginvideoplayer/model/player_config.dart';
 import 'package:flutterpluginvideoplayer/view/video_player.dart';
 
-///
 ///Copyright (C) 2019 MIXIAOTU.COM Inc. All rights reserved.
 ///This is source code from kexuemihe project.
 ///The distribution of any copyright must be permitted mixiaotu Company.
@@ -16,12 +15,33 @@ import 'package:flutterpluginvideoplayer/view/video_player.dart';
 ///v0001                  2020/6/27           Dell               创建
 ///
 class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
+  ///  是否显示控件
+  final bool showControls;
+  final Widget placeholder;
+  final Widget overlay;
+
+  ///全屏显示
+  bool _isFullScreen = false;
+
+  bool get isFullScreen => _isFullScreen;
+
+  ///控制休眠保持屏幕常亮
+  final bool allowedScreenSleep;
+//  final double aspectRatio;
+
+  /// Defines the system overlays visible after exiting fullscreen
+  final List<SystemUiOverlay> systemOverlaysAfterFullScreen;
+
+  /// Defines the set of allowed device orientations after exiting fullscreen
+  final List<DeviceOrientation> deviceOrientationsAfterFullScreen;
+  final ChewieRoutePageBuilder routePageBuilder;
   int _textureId;
   final String dataSource;
   final DataSourceType dataSourceType;
   final PlayerConfig playerConfig;
   MethodChannel channel = VideoPlayer.channel;
   bool _isDisposed = false;
+
   StreamSubscription<dynamic> _eventSubscription;
   _VideoAppLifeCycleObserver _lifeCycleObserver;
 
@@ -29,20 +49,64 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   int get textureId => _textureId;
 
   VideoPlayerController.asset(this.dataSource,
-      {this.playerConfig = const PlayerConfig()})
+      {this.showControls = true,
+      this.allowedScreenSleep = true,
+      this.systemOverlaysAfterFullScreen = SystemUiOverlay.values,
+      this.deviceOrientationsAfterFullScreen = const [
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ],
+      this.routePageBuilder = null,
+//      this.aspectRatio,
+      this.placeholder,
+      this.overlay,
+      this.customControls,
+      this.playerConfig = const PlayerConfig()})
       : dataSourceType = DataSourceType.asset,
         super(VideoPlayerValue());
 
   VideoPlayerController.network(this.dataSource,
-      {this.playerConfig = const PlayerConfig()})
+      {this.showControls = true,
+      this.allowedScreenSleep = true,
+      this.systemOverlaysAfterFullScreen = SystemUiOverlay.values,
+      this.deviceOrientationsAfterFullScreen = const [
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ],
+      this.routePageBuilder = null,
+//      this.aspectRatio,
+      this.placeholder,
+      this.overlay,
+      this.customControls,
+      this.playerConfig = const PlayerConfig()})
       : dataSourceType = DataSourceType.network,
         super(VideoPlayerValue());
 
   VideoPlayerController.file(String filePath,
-      {this.playerConfig = const PlayerConfig()})
+      {this.showControls = true,
+      this.allowedScreenSleep = true,
+      this.systemOverlaysAfterFullScreen = SystemUiOverlay.values,
+      this.deviceOrientationsAfterFullScreen = const [
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ],
+      this.routePageBuilder = null,
+//      this.aspectRatio,
+      this.placeholder,
+      this.overlay,
+      this.customControls,
+      this.playerConfig = const PlayerConfig()})
       : dataSource = filePath,
         dataSourceType = DataSourceType.file,
         super(VideoPlayerValue());
+
+  final Widget customControls;
 
   ///初始化播放器的方法
   Future<void> initialize() async {
@@ -187,6 +251,31 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
       'index': index,
     });
     value = value.copyWith(bitrateIndex: index);
+  }
+
+  setLooping(bool looping) {}
+
+  setVolume(double volume) {}
+
+  ///改变屏幕方向
+  void toggleScreen() {
+    _isFullScreen = !_isFullScreen;
+//    notifyListeners();
+//    print("1111111111111111111111111111111toggleScreen");
+  }
+
+  ///进入全屏
+  void enterFullScreen() {
+    _isFullScreen = true;
+    notifyListeners();
+    print("1111111111111111111111111111111enterFullScreen");
+  }
+
+  ///退出全屏
+  void exitFullScreen() {
+    _isFullScreen = false;
+    notifyListeners();
+    print("1111111111111111111111111111111exitFullScreen");
   }
 
   Future<void> setRate(double rate) async {

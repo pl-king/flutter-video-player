@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterpluginvideoplayer/view/video_player_platform_interface.dart';
 
 ///
 ///Copyright (C) 2019 MIXIAOTU.COM Inc. All rights reserved.
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 ///
 
 class VideoPlayerValue {
+  final List<DurationRange> buffered;
   final Duration duration;
   final Duration position;
   final Duration playable;
@@ -22,6 +24,8 @@ class VideoPlayerValue {
   final int netSpeed;
   final double rate;
   final int bitrateIndex;
+  final double volume;
+  final bool isBuffering;
 
   bool get initialized => duration.inMilliseconds != 0;
 
@@ -32,6 +36,8 @@ class VideoPlayerValue {
       : 1.0;
 
   VideoPlayerValue({
+    this.volume = 1.0,
+    this.isBuffering = false,
     this.duration = const Duration(),
     this.position = const Duration(),
     this.playable = const Duration(),
@@ -41,10 +47,12 @@ class VideoPlayerValue {
     this.isLoading = false,
     this.netSpeed,
     this.rate = 1.0,
-    this.bitrateIndex = 0, //TODO 默认清晰度
+    this.bitrateIndex = 0,
+    this.buffered = const <DurationRange>[],
   });
 
   VideoPlayerValue copyWith({
+    List<DurationRange> buffered,
     Duration duration,
     Duration position,
     Duration playable,
@@ -57,6 +65,7 @@ class VideoPlayerValue {
     int bitrateIndex,
   }) {
     return VideoPlayerValue(
+      buffered: buffered ?? this.buffered,
       duration: duration ?? this.duration,
       position: position ?? this.position,
       playable: playable ?? this.playable,
