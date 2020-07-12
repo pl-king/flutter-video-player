@@ -3,9 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutterpluginvideoplayer/controller/video_player_controller.dart';
 import 'package:flutterpluginvideoplayer/model/video_player_value.dart';
 import 'package:flutterpluginvideoplayer/view/player_with_controls.dart';
-import 'package:flutterpluginvideoplayer/view/video_player_full.dart';
 import 'package:flutterpluginvideoplayer/view/video_player_platform_interface.dart';
-import 'package:wakelock/wakelock.dart';
 
 import 'materialcontrols.dart';
 
@@ -18,7 +16,7 @@ typedef Widget ChewieRoutePageBuilder(
     BuildContext context,
     Animation<double> animation,
     Animation<double> secondaryAnimation,
-    _PlayerControllerProvider controllerProvider);
+    PlayerControllerProvider controllerProvider);
 
 class VideoPlayer extends StatefulWidget {
   static MethodChannel channel = const MethodChannel('flutterpluginvideoplayer')
@@ -68,38 +66,41 @@ class _VideoPlayerState extends State<VideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return _PlayerControllerProvider(
+    return PlayerControllerProvider(
       controller: widget.controller,
-      child: Center(
-        child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: AspectRatio(
-              aspectRatio: widget.controller.value.aspectRatio ??
-                  _calculateAspectRatio(context),
-              child: Stack(
-                children: <Widget>[
-                  ValueListenableBuilder(
-                    valueListenable: widget.controller,
-                    builder: (BuildContext context, VideoPlayerValue value,
-                        Widget child) {
-                      var _textureId = widget.controller.textureId;
-                      return _textureId == null
-                          ? Container()
-                          : _videoPlayerPlatform.buildView(_textureId);
-                    },
-                  ),
-                  _buildControls(context, widget.controller),
-                ],
-              ),
-            )
-
-//          AspectRatio(
-//            aspectRatio:
-//            chewieController.aspectRatio ?? _calculateAspectRatio(context),
-//            child: _buildPlayerWithControls(chewieController, context),
-//          ),
-            ),
-      ),
+      child:
+      PlayerWithControls(),
+//
+//          Center(
+//        child: Container(
+//            width: MediaQuery.of(context).size.width,
+//            child: AspectRatio(
+//              aspectRatio: widget.controller.value.aspectRatio ??
+//                  _calculateAspectRatio(context),
+//              child: Stack(
+//                children: <Widget>[
+//                  ValueListenableBuilder(
+//                    valueListenable: widget.controller,
+//                    builder: (BuildContext context, VideoPlayerValue value,
+//                        Widget child) {
+//                      var _textureId = widget.controller.textureId;
+//                      return _textureId == null
+//                          ? Container()
+//                          : _videoPlayerPlatform.buildView(_textureId);
+//                    },
+//                  ),
+//                  _buildControls(context, widget.controller),
+//                ],
+//              ),
+//            )
+//
+////          AspectRatio(
+////            aspectRatio:
+////            chewieController.aspectRatio ?? _calculateAspectRatio(context),
+////            child: _buildPlayerWithControls(chewieController, context),
+////          ),
+//            ),
+//      ),
     );
 
 //    ChangeNotifierProvider
@@ -126,9 +127,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
     BuildContext context,
     VideoPlayerController controller,
   ) {
-    return controller.showControls
-        ? MaterialControls(controller, false)
-        : Container();
+    return controller.showControls ? MaterialControls() : Container();
 //      controller.showControls
 //        ? controller.customControls != null
 //            ? controller.customControls
@@ -210,7 +209,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
       BuildContext context,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      _PlayerControllerProvider controllerProvider) {
+      PlayerControllerProvider controllerProvider) {
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, Widget child) {
@@ -222,7 +221,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
   Widget _buildFullScreenVideo(
       BuildContext context,
       Animation<double> animation,
-      _PlayerControllerProvider controllerProvider) {
+      PlayerControllerProvider controllerProvider) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
@@ -234,8 +233,8 @@ class _VideoPlayerState extends State<VideoPlayer> {
   }
 }
 
-class _PlayerControllerProvider extends InheritedWidget {
-  const _PlayerControllerProvider({
+class PlayerControllerProvider extends InheritedWidget {
+  const PlayerControllerProvider({
     Key key,
     @required this.controller,
     @required Widget child,
@@ -246,6 +245,6 @@ class _PlayerControllerProvider extends InheritedWidget {
   final VideoPlayerController controller;
 
   @override
-  bool updateShouldNotify(_PlayerControllerProvider old) =>
+  bool updateShouldNotify(PlayerControllerProvider old) =>
       controller != old.controller;
 }

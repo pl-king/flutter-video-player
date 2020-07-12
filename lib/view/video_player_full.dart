@@ -84,9 +84,7 @@ class _VideoFullState extends State<VideoFullPage> {
     BuildContext context,
     VideoPlayerController controller,
   ) {
-    return controller.showControls
-        ? MaterialControls(controller, true)
-        : Container();
+    return controller.showControls ? MaterialControls() : Container();
 //      controller.showControls
 //        ? controller.customControls != null
 //            ? controller.customControls

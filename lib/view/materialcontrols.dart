@@ -5,11 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterpluginvideoplayer/controller/video_player_controller.dart';
 import 'package:flutterpluginvideoplayer/model/video_player_value.dart';
-import 'package:flutterpluginvideoplayer/view/progress_colors.dart';
 import 'package:flutterpluginvideoplayer/view/video_player_full.dart';
 
 import '../utils.dart';
-import 'material_progress_bar.dart';
 
 ///
 ///Copyright (C) 2019 MIXIAOTU.COM Inc. All rights reserved.
@@ -22,12 +20,7 @@ import 'material_progress_bar.dart';
 ///v0001                  2020/7/4           Dell               创建
 ///
 class MaterialControls extends StatefulWidget {
-  VideoPlayerController controller;
-  bool isFullScreen = false;
-
-  MaterialControls(
-    this.controller,
-    this.isFullScreen, {
+  MaterialControls({
     Key key,
   }) : super(key: key);
 
@@ -49,30 +42,23 @@ class _MaterialControlsState extends State<MaterialControls> {
 
   final barHeight = 48.0;
   final marginSize = 5.0;
-
-  @override
-  void initState() {
-    _initialize();
-    super.initState();
-  }
+  VideoPlayerController controller;
 
   @override
   Widget build(BuildContext context) {
     if (_latestValue.hasError) {
-      return
-//      return chewieController.errorBuilder != null
-//          ? chewieController.errorBuilder(
-//              context,
-//              chewieController.videoPlayerController.value.errorDescription,
-//            )
-//          :
-          Center(
-        child: Icon(
-          Icons.error,
-          color: Colors.white,
-          size: 42,
-        ),
-      );
+      return controller.errorBuilder != null
+          ? controller.errorBuilder(
+              context,
+              controller.value.errorDescription,
+            )
+          : Center(
+              child: Icon(
+                Icons.error,
+                color: Colors.white,
+                size: 42,
+              ),
+            );
     }
     return MouseRegion(
       onHover: (_) {
@@ -107,25 +93,23 @@ class _MaterialControlsState extends State<MaterialControls> {
   }
 
   void _dispose() {
-    widget.controller.removeListener(_updateState);
+    controller.removeListener(_updateState);
     _hideTimer?.cancel();
     _initTimer?.cancel();
     _showAfterExpandCollapseTimer?.cancel();
   }
 
-//  @override
-//  void didChangeDependencies() {
-////    final _oldController = chewieController;
-////    chewieController = ChewieController.of(context);
-////    controller = chewieController.videoPlayerController;
-////
-//    if (_oldController != chewieController) {
-//      _dispose();
-//
-//    }
-////
-//    super.didChangeDependencies();
-//  }
+  @override
+  void didChangeDependencies() {
+    final _oldController = controller;
+    controller = VideoPlayerController.of(context);
+    if (_oldController != controller) {
+      _dispose();
+      _initialize();
+    }
+
+    super.didChangeDependencies();
+  }
 
   AnimatedOpacity _buildBottomBar(
     BuildContext context,
@@ -140,7 +124,7 @@ class _MaterialControlsState extends State<MaterialControls> {
         color: Theme.of(context).dialogBackgroundColor,
         child: Row(
           children: <Widget>[
-            _buildPlayPause(widget.controller),
+            _buildPlayPause(controller),
 //            chewieController.isLive
 //                ? Expanded(child: const Text('LIVE'))
 //                :
@@ -149,11 +133,11 @@ class _MaterialControlsState extends State<MaterialControls> {
 //            chewieController.allowMuting
 //                ?
             ///静音按钮
-            _buildMuteButton(widget.controller),
+            _buildMuteButton(controller),
 //                : Container(),
 //            chewieController.allowFullScreen
             ///屏幕放大缩小控制
-            _buildExpandButton(widget.controller),
+            _buildExpandButton(controller),
 //                : Container(),
           ],
         ),
@@ -324,16 +308,16 @@ class _MaterialControlsState extends State<MaterialControls> {
 
 //
   Future<Null> _initialize() async {
-//    controller.addListener(_updateState);
+    controller.addListener(_updateState);
 //
     _updateState();
 //
 //    if ((controller.value != null && controller.value.isPlaying) ||
-//        chewieController.autoPlay) {
+//        controller.autoPlay) {
 //      _startHideTimer();
 //    }
 //
-//    if (chewieController.showControlsOnInitialize) {
+//    if (controller.showControlsOnInitialize) {
 //      _initTimer = Timer(Duration(milliseconds: 200), () {
 //        setState(() {
 //          _hideStuff = false;
@@ -344,13 +328,13 @@ class _MaterialControlsState extends State<MaterialControls> {
 
 //
   void _onExpandCollapse() {
-    if (widget.isFullScreen) {
+    if (controller.isFullScreen) {
       Navigator.pop(context);
       AutoOrientation.portraitUpMode();
     } else {
 //      widget.controller.enterFullScreen();
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        return VideoFullPage(widget.controller);
+        return VideoFullPage(controller);
       }));
     }
     setState(() {
@@ -368,22 +352,22 @@ class _MaterialControlsState extends State<MaterialControls> {
     bool isFinished = _latestValue.position >= _latestValue.duration;
 
     setState(() {
-      if (widget.controller.value.isPlaying) {
+      if (controller.value.isPlaying) {
         _hideStuff = false;
         _hideTimer?.cancel();
-        widget.controller.pause();
+        controller.pause();
       } else {
         _cancelAndRestartTimer();
 
-        if (!widget.controller.value.initialized) {
-          widget.controller.initialize().then((_) {
-            widget.controller.play();
+        if (!controller.value.initialized) {
+          controller.initialize().then((_) {
+            controller.play();
           });
         } else {
           if (isFinished) {
-            widget.controller.seekTo(Duration(seconds: 0));
+            controller.seekTo(Duration(seconds: 0));
           }
-          widget.controller.play();
+          controller.play();
         }
       }
     });
@@ -401,7 +385,7 @@ class _MaterialControlsState extends State<MaterialControls> {
 //
   void _updateState() {
     setState(() {
-      _latestValue = widget.controller.value;
+      _latestValue = controller.value;
     });
   }
 //

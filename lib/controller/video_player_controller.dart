@@ -42,12 +42,20 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   final PlayerConfig playerConfig;
   MethodChannel channel = VideoPlayer.channel;
   bool _isDisposed = false;
-
+  final Widget Function(BuildContext context, String errorMessage) errorBuilder;
   StreamSubscription<dynamic> _eventSubscription;
   _VideoAppLifeCycleObserver _lifeCycleObserver;
 
   @visibleForTesting
   int get textureId => _textureId;
+
+  static VideoPlayerController of(BuildContext context) {
+    final chewieControllerProvider =
+        context.inheritFromWidgetOfExactType(PlayerControllerProvider)
+            as PlayerControllerProvider;
+
+    return chewieControllerProvider.controller;
+  }
 
   VideoPlayerController.asset(this.dataSource,
       {this.showControls = true,
@@ -64,6 +72,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
       this.placeholder,
       this.overlay,
       this.customControls,
+      this.errorBuilder,
       this.playerConfig = const PlayerConfig()})
       : dataSourceType = DataSourceType.asset,
         super(VideoPlayerValue()) {
@@ -85,6 +94,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
       this.placeholder,
       this.overlay,
       this.customControls,
+      this.errorBuilder,
       this.playerConfig = const PlayerConfig()})
       : dataSourceType = DataSourceType.network,
         super(VideoPlayerValue()) {
@@ -106,6 +116,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
       this.placeholder,
       this.overlay,
       this.customControls,
+      this.errorBuilder,
       this.playerConfig = const PlayerConfig()})
       : dataSource = filePath,
         dataSourceType = DataSourceType.file,
