@@ -22,13 +22,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.4.1"
-  auto_orientation:
-    dependency: "direct main"
-    description:
-      name: auto_orientation
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.5"
   boolean_selector:
     dependency: transitive
     description:

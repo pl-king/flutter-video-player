@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterpluginvideoplayer/controller/video_player_controller.dart';
@@ -328,24 +327,24 @@ class _MaterialControlsState extends State<MaterialControls> {
 
 //
   void _onExpandCollapse() {
-    if (controller.isFullScreen) {
-      Navigator.pop(context);
-      AutoOrientation.portraitUpMode();
-    } else {
-      controller.toggleScreen();
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        return VideoFullPage(controller);
-      }));
-    }
-//    setState(() {
-//      _hideStuff = true;
+//    if (controller.isFullScreen) {
+//      Navigator.pop(context);
+//      AutoOrientation.portraitUpMode();
+//    } else {
 //      controller.toggleScreen();
-//      _showAfterExpandCollapseTimer = Timer(Duration(milliseconds: 300), () {
-//        setState(() {
-//          _cancelAndRestartTimer();
-//        });
-//      });
-//    });
+//      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+//        return VideoFullPage(controller);
+//      }));
+//    }
+    setState(() {
+      _hideStuff = true;
+      controller.toggleScreen();
+      _showAfterExpandCollapseTimer = Timer(Duration(milliseconds: 300), () {
+        setState(() {
+          _cancelAndRestartTimer();
+        });
+      });
+    });
   }
 
 //

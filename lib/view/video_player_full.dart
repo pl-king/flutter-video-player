@@ -1,4 +1,4 @@
-import 'package:auto_orientation/auto_orientation.dart';
+//import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterpluginvideoplayer/controller/video_player_controller.dart';
 import 'package:flutterpluginvideoplayer/view/video_player.dart';
@@ -20,7 +20,7 @@ class _VideoFullState extends State<VideoFullPage> {
   @override
   void initState() {
     super.initState();
-    AutoOrientation.landscapeAutoMode();
+//    AutoOrientation.landscapeAutoMode();
     widget.controller.addListener(listener);
   }
 
@@ -48,7 +48,7 @@ class _VideoFullState extends State<VideoFullPage> {
                   color: Colors.white,
                   onPressed: () {
                     Navigator.pop(context);
-                    AutoOrientation.portraitUpMode();
+//                    AutoOrientation.portraitUpMode();
                     widget.controller.toggleScreen();
                   },
                 ),
@@ -65,7 +65,7 @@ class _VideoFullState extends State<VideoFullPage> {
   void dispose() {
     super.dispose();
     widget.controller.removeListener(listener);
-    AutoOrientation.portraitUpMode();
+//    AutoOrientation.portraitUpMode();
 //    }
   }
 

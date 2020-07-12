@@ -1,4 +1,4 @@
-import 'package:auto_orientation/auto_orientation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterpluginvideoplayer/controller/video_player_controller.dart';
@@ -123,7 +123,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
         widget.controller.systemOverlaysAfterFullScreen);
     SystemChrome.setPreferredOrientations(
         widget.controller.deviceOrientationsAfterFullScreen);
-    AutoOrientation.portraitUpMode();
+//    AutoOrientation.portraitUpMode();
   }
 
   Widget _fullScreenRoutePageBuilder(

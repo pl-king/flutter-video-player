@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
