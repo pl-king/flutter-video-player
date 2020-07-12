@@ -21,6 +21,7 @@ class _VideoFullState extends State<VideoFullPage> {
   void initState() {
     super.initState();
     AutoOrientation.landscapeAutoMode();
+    widget.controller.addListener(listener);
   }
 
   @override
@@ -48,6 +49,7 @@ class _VideoFullState extends State<VideoFullPage> {
                   onPressed: () {
                     Navigator.pop(context);
                     AutoOrientation.portraitUpMode();
+                    widget.controller.toggleScreen();
                   },
                 ),
               ),
@@ -62,8 +64,19 @@ class _VideoFullState extends State<VideoFullPage> {
   @override
   void dispose() {
     super.dispose();
-//    if (isLand == true) {
+    widget.controller.removeListener(listener);
     AutoOrientation.portraitUpMode();
+//    }
+  }
+
+  void listener() async {
+    print("1111111111111111111111111full");
+//    if (widget.controller.isFullScreen && !_isFullScreen) {
+//      _isFullScreen = true;
+////      await _pushFullScreenWidget(context);
+//    } else if (_isFullScreen) {
+//      Navigator.of(context, rootNavigator: true).pop();
+//      _isFullScreen = false;
 //    }
   }
 

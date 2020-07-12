@@ -32,18 +32,18 @@ class _MyAppState extends State<MyApp> {
   VideoPlayerController _controller;
   VoidCallback listener;
 
-  String mu =
-      'http://video.mxiaotu.com/sv/45f581bf-170dcfb80a5/45f581bf-170dcfb80a5.mp4';
-  String videoUrlB =
-      'http://video.mxiaotu.com/sv/45f581bf-170dcfb80a5/45f581bf-170dcfb80a5.mp4';
-  String videoUrlG =
-      'http://video.mxiaotu.com/sv/45f581bf-170dcfb80a5/45f581bf-170dcfb80a5.mp4';
-  String spe1 =
-      'http://video.mxiaotu.com/sv/45f581bf-170dcfb80a5/45f581bf-170dcfb80a5.mp4';
-  String spe2 =
-      'http://video.mxiaotu.com/sv/45f581bf-170dcfb80a5/45f581bf-170dcfb80a5.mp4';
+//  String mu =
+//      'http://video.mxiaotu.com/sv/45f581bf-170dcfb80a5/45f581bf-170dcfb80a5.mp4';
+//  String videoUrlB =
+//      'http://video.mxiaotu.com/sv/45f581bf-170dcfb80a5/45f581bf-170dcfb80a5.mp4';
+//  String videoUrlG =
+//      'http://video.mxiaotu.com/sv/45f581bf-170dcfb80a5/45f581bf-170dcfb80a5.mp4';
+//  String spe1 =
+//      'http://video.mxiaotu.com/sv/45f581bf-170dcfb80a5/45f581bf-170dcfb80a5.mp4';
+//  String spe2 =
+//      'http://video.mxiaotu.com/sv/45f581bf-170dcfb80a5/45f581bf-170dcfb80a5.mp4';
   String spe3 =
-      'http://video.mxiaotu.com/sv/45f581bf-170dcfb80a5/45f581bf-170dcfb80a5.mp4';
+      'http://1252463788.vod2.myqcloud.com/95576ef5vodtransgzp1252463788/e1ab85305285890781763144364/v.f20.mp4';
 
   VoidCallback downloadListener;
 

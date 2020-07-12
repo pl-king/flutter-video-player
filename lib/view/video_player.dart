@@ -18,23 +18,7 @@ typedef Widget ChewieRoutePageBuilder(
     BuildContext context,
     Animation<double> animation,
     Animation<double> secondaryAnimation,
-    _ChewieControllerProvider controllerProvider);
-
-class _ChewieControllerProvider extends InheritedWidget {
-  const _ChewieControllerProvider({
-    Key key,
-    @required this.controller,
-    @required Widget child,
-  })  : assert(controller != null),
-        assert(child != null),
-        super(key: key, child: child);
-
-  final VideoPlayerController controller;
-
-  @override
-  bool updateShouldNotify(_ChewieControllerProvider old) =>
-      controller != old.controller;
-}
+    _PlayerControllerProvider controllerProvider);
 
 class VideoPlayer extends StatefulWidget {
   static MethodChannel channel = const MethodChannel('flutterpluginvideoplayer')
@@ -73,8 +57,6 @@ class _VideoPlayerState extends State<VideoPlayer> {
       widget.controller.addListener(listener);
     }
     super.didUpdateWidget(oldWidget);
-//    if (widget.controller != null) if (!widget.controller.isFullScreen)
-
   }
 
   @override
@@ -86,35 +68,38 @@ class _VideoPlayerState extends State<VideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-          width: MediaQuery.of(context).size.width,
-          child: AspectRatio(
-            aspectRatio: widget.controller.value.aspectRatio ??
-                _calculateAspectRatio(context),
-            child: Stack(
-              children: <Widget>[
-                ValueListenableBuilder(
-                  valueListenable: widget.controller,
-                  builder: (BuildContext context, VideoPlayerValue value,
-                      Widget child) {
-                    var _textureId = widget.controller.textureId;
-                    return _textureId == null
-                        ? Container()
-                        : _videoPlayerPlatform.buildView(_textureId);
-                  },
-                ),
-                _buildControls(context, widget.controller),
-              ],
-            ),
-          )
+    return _PlayerControllerProvider(
+      controller: widget.controller,
+      child: Center(
+        child: Container(
+            width: MediaQuery.of(context).size.width,
+            child: AspectRatio(
+              aspectRatio: widget.controller.value.aspectRatio ??
+                  _calculateAspectRatio(context),
+              child: Stack(
+                children: <Widget>[
+                  ValueListenableBuilder(
+                    valueListenable: widget.controller,
+                    builder: (BuildContext context, VideoPlayerValue value,
+                        Widget child) {
+                      var _textureId = widget.controller.textureId;
+                      return _textureId == null
+                          ? Container()
+                          : _videoPlayerPlatform.buildView(_textureId);
+                    },
+                  ),
+                  _buildControls(context, widget.controller),
+                ],
+              ),
+            )
 
 //          AspectRatio(
 //            aspectRatio:
 //            chewieController.aspectRatio ?? _calculateAspectRatio(context),
 //            child: _buildPlayerWithControls(chewieController, context),
 //          ),
-          ),
+            ),
+      ),
     );
 
 //    ChangeNotifierProvider
@@ -158,13 +143,14 @@ class _VideoPlayerState extends State<VideoPlayer> {
   }
 
   void listener() async {
-    if (widget.controller.isFullScreen && !_isFullScreen) {
-      _isFullScreen = true;
-//      await _pushFullScreenWidget(context);
-    } else if (_isFullScreen) {
-      Navigator.of(context, rootNavigator: true).pop();
-      _isFullScreen = false;
-    }
+    print("1111111111111111111111111not full");
+//    if (widget.controller.isFullScreen && !_isFullScreen) {
+//      _isFullScreen = true;
+////      await _pushFullScreenWidget(context);
+//    } else if (_isFullScreen) {
+//      Navigator.of(context, rootNavigator: true).pop();
+//      _isFullScreen = false;
+//    }
   }
 
 //  Future<dynamic> _pushFullScreenWidget(BuildContext context) async {
@@ -224,7 +210,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
       BuildContext context,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      _ChewieControllerProvider controllerProvider) {
+      _PlayerControllerProvider controllerProvider) {
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, Widget child) {
@@ -236,7 +222,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
   Widget _buildFullScreenVideo(
       BuildContext context,
       Animation<double> animation,
-      _ChewieControllerProvider controllerProvider) {
+      _PlayerControllerProvider controllerProvider) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
@@ -246,4 +232,20 @@ class _VideoPlayerState extends State<VideoPlayer> {
       ),
     );
   }
+}
+
+class _PlayerControllerProvider extends InheritedWidget {
+  const _PlayerControllerProvider({
+    Key key,
+    @required this.controller,
+    @required Widget child,
+  })  : assert(controller != null),
+        assert(child != null),
+        super(key: key, child: child);
+
+  final VideoPlayerController controller;
+
+  @override
+  bool updateShouldNotify(_PlayerControllerProvider old) =>
+      controller != old.controller;
 }

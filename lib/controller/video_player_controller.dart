@@ -27,6 +27,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
 
   ///控制休眠保持屏幕常亮
   final bool allowedScreenSleep;
+
 //  final double aspectRatio;
 
   /// Defines the system overlays visible after exiting fullscreen
@@ -65,7 +66,9 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
       this.customControls,
       this.playerConfig = const PlayerConfig()})
       : dataSourceType = DataSourceType.asset,
-        super(VideoPlayerValue());
+        super(VideoPlayerValue()) {
+    _initialize();
+  }
 
   VideoPlayerController.network(this.dataSource,
       {this.showControls = true,
@@ -84,7 +87,9 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
       this.customControls,
       this.playerConfig = const PlayerConfig()})
       : dataSourceType = DataSourceType.network,
-        super(VideoPlayerValue());
+        super(VideoPlayerValue()) {
+    _initialize();
+  }
 
   VideoPlayerController.file(String filePath,
       {this.showControls = true,
@@ -104,7 +109,9 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
       this.playerConfig = const PlayerConfig()})
       : dataSource = filePath,
         dataSourceType = DataSourceType.file,
-        super(VideoPlayerValue());
+        super(VideoPlayerValue()) {
+    _initialize();
+  }
 
   final Widget customControls;
 
@@ -260,21 +267,20 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   ///改变屏幕方向
   void toggleScreen() {
     _isFullScreen = !_isFullScreen;
-//    notifyListeners();
-//    print("1111111111111111111111111111111toggleScreen");
+    notifyListeners();
   }
 
   ///进入全屏
   void enterFullScreen() {
     _isFullScreen = true;
-    notifyListeners();
+//    notifyListeners();
     print("1111111111111111111111111111111enterFullScreen");
   }
 
   ///退出全屏
   void exitFullScreen() {
     _isFullScreen = false;
-    notifyListeners();
+//    notifyListeners();
     print("1111111111111111111111111111111exitFullScreen");
   }
 
@@ -292,6 +298,12 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
       'rate': rate,
     });
     value = value.copyWith(rate: rate);
+  }
+
+  void _initialize() {
+//    if (fullScreenByDefault) {
+//      videoPlayerController.addListener(_fullScreenListener);
+//    }
   }
 }
 
