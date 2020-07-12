@@ -4,6 +4,7 @@ import 'package:flutterpluginvideoplayer/controller/video_player_controller.dart
 import 'package:flutterpluginvideoplayer/model/video_player_value.dart';
 import 'package:flutterpluginvideoplayer/view/video_player.dart';
 import 'package:flutterpluginvideoplayer/view/video_player_platform_interface.dart';
+import 'cupertino_controls.dart';
 import 'materialcontrols.dart';
 
 final VideoPlayerPlatform _videoPlayerPlatform = VideoPlayerPlatform.instance
@@ -98,12 +99,15 @@ class PlayerWithControls extends StatelessWidget {
         ? controller.customControls != null
             ? controller.customControls
             : Theme.of(context).platform == TargetPlatform.android
-                ? MaterialControls()
-                : MaterialControls()
-//    CupertinoControls(
-//      backgroundColor: Color.fromRGBO(41, 41, 41, 0.7),
-//      iconColor: Color.fromARGB(255, 200, 200, 200),
-//    )
+//                ? MaterialControls()
+                ? CupertinoControls(
+                    backgroundColor: Color.fromRGBO(41, 41, 41, 0.7),
+                    iconColor: Color.fromARGB(255, 200, 200, 200),
+                  )
+                : CupertinoControls(
+                    backgroundColor: Color.fromRGBO(41, 41, 41, 0.7),
+                    iconColor: Color.fromARGB(255, 200, 200, 200),
+                  )
         : Container();
   }
 

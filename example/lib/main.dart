@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -66,6 +68,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Video Demo',
       home: Scaffold(
+        appBar: PreferredSize(
+            child: _buildTopApBar(), preferredSize: Size.fromHeight(80)),
         backgroundColor: Colors.white,
         body: Stack(
           children: <Widget>[
@@ -83,6 +87,19 @@ class _MyAppState extends State<MyApp> {
                 ))
           ],
         ),
+      ),
+    );
+  }
+
+  _buildTopApBar() {
+    var top = MediaQueryData.fromWindow(window).padding.top;
+    return Container(
+      padding: EdgeInsets.only(top: top),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Container(width: 44, child: SizedBox()),
+        ],
       ),
     );
   }

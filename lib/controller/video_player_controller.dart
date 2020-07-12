@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterpluginvideoplayer/model/video_player_value.dart';
 import 'package:flutterpluginvideoplayer/model/player_config.dart';
+import 'package:flutterpluginvideoplayer/view/progress_colors.dart';
 import 'package:flutterpluginvideoplayer/view/video_player.dart';
 
 ///Copyright (C) 2019 MIXIAOTU.COM Inc. All rights reserved.
@@ -19,6 +20,8 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   final bool showControls;
   final Widget placeholder;
   final Widget overlay;
+  final bool allowFullScreen;
+  final bool allowMuting;
 
   ///全屏显示
   bool _isFullScreen = false;
@@ -45,6 +48,8 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   final Widget Function(BuildContext context, String errorMessage) errorBuilder;
   StreamSubscription<dynamic> _eventSubscription;
   _VideoAppLifeCycleObserver _lifeCycleObserver;
+  final bool showControlsOnInitialize;
+  final ChewieProgressColors cupertinoProgressColors;
 
   @visibleForTesting
   int get textureId => _textureId;
@@ -60,6 +65,8 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   VideoPlayerController.asset(this.dataSource,
       {this.showControls = true,
       this.allowedScreenSleep = true,
+      this.showControlsOnInitialize = true,
+      this.cupertinoProgressColors,
       this.systemOverlaysAfterFullScreen = SystemUiOverlay.values,
       this.deviceOrientationsAfterFullScreen = const [
         DeviceOrientation.portraitUp,
@@ -68,7 +75,8 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
         DeviceOrientation.landscapeRight,
       ],
       this.routePageBuilder = null,
-//      this.aspectRatio,
+      this.allowFullScreen = true,
+      this.allowMuting = true,
       this.placeholder,
       this.overlay,
       this.customControls,
@@ -82,6 +90,8 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   VideoPlayerController.network(this.dataSource,
       {this.showControls = true,
       this.allowedScreenSleep = true,
+      this.cupertinoProgressColors,
+      this.showControlsOnInitialize = true,
       this.systemOverlaysAfterFullScreen = SystemUiOverlay.values,
       this.deviceOrientationsAfterFullScreen = const [
         DeviceOrientation.portraitUp,
@@ -90,7 +100,8 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
         DeviceOrientation.landscapeRight,
       ],
       this.routePageBuilder = null,
-//      this.aspectRatio,
+      this.allowFullScreen = true,
+      this.allowMuting = true,
       this.placeholder,
       this.overlay,
       this.customControls,
@@ -104,6 +115,8 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   VideoPlayerController.file(String filePath,
       {this.showControls = true,
       this.allowedScreenSleep = true,
+      this.showControlsOnInitialize = true,
+      this.cupertinoProgressColors,
       this.systemOverlaysAfterFullScreen = SystemUiOverlay.values,
       this.deviceOrientationsAfterFullScreen = const [
         DeviceOrientation.portraitUp,
@@ -112,7 +125,8 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
         DeviceOrientation.landscapeRight,
       ],
       this.routePageBuilder = null,
-//      this.aspectRatio,
+      this.allowFullScreen = true,
+      this.allowMuting = true,
       this.placeholder,
       this.overlay,
       this.customControls,
@@ -284,14 +298,14 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   ///进入全屏
   void enterFullScreen() {
     _isFullScreen = true;
-//    notifyListeners();
+    notifyListeners();
     print("1111111111111111111111111111111enterFullScreen");
   }
 
   ///退出全屏
   void exitFullScreen() {
     _isFullScreen = false;
-//    notifyListeners();
+    notifyListeners();
     print("1111111111111111111111111111111exitFullScreen");
   }
 

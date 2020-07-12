@@ -317,13 +317,13 @@ class _MaterialControlsState extends State<MaterialControls> {
 //      _startHideTimer();
 //    }
 //
-//    if (controller.showControlsOnInitialize) {
-//      _initTimer = Timer(Duration(milliseconds: 200), () {
-//        setState(() {
-//          _hideStuff = false;
-//        });
-//      });
-//    }
+    if (controller.showControlsOnInitialize) {
+      _initTimer = Timer(Duration(milliseconds: 200), () {
+        setState(() {
+          _hideStuff = false;
+        });
+      });
+    }
   }
 
 //
@@ -332,19 +332,20 @@ class _MaterialControlsState extends State<MaterialControls> {
       Navigator.pop(context);
       AutoOrientation.portraitUpMode();
     } else {
-//      widget.controller.enterFullScreen();
+      controller.toggleScreen();
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
         return VideoFullPage(controller);
       }));
     }
-    setState(() {
-//      widget.controller.toggleScreen();
+//    setState(() {
+//      _hideStuff = true;
+//      controller.toggleScreen();
 //      _showAfterExpandCollapseTimer = Timer(Duration(milliseconds: 300), () {
 //        setState(() {
 //          _cancelAndRestartTimer();
 //        });
 //      });
-    });
+//    });
   }
 
 //
